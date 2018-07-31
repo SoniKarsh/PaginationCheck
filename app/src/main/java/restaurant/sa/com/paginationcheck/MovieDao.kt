@@ -7,13 +7,16 @@ import android.arch.persistence.room.Query
 @Dao
 interface MovieDao {
 
-    @Query("SELECT * FROM User")
+    @Query("SELECT * FROM Movie")
     fun getAll(): List<Movie>
 
     @Insert
-    fun insertData(userModel: Movie)
+    fun insertData(movieData: Movie)
 
-    @Query("DELETE from User")
+    @Query("DELETE from Movie")
     fun deleteAll()
+
+    @Query("SELECT * FROM Movie LIMIT :limit OFFSET :offset")
+    fun loadAllUsersByPage(limit: Int, offset: Int): Movie
 
 }

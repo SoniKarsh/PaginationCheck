@@ -1,5 +1,6 @@
 package restaurant.sa.com.paginationcheck
 
+import android.arch.persistence.room.Room
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -15,6 +16,8 @@ class MainActivity : AppCompatActivity() {
     private var tempList = ArrayList<Movie>()
     var startC = 0
     var stop = 5
+    var c = 0
+    private val TAG = "MainActivity";
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,66 +28,81 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = layout
         recyclerView.adapter = mAdapter
         prepareMovieData()
+        for(i in movieList){
+            PaginationApp.database!!.movieDao().insertData(i)
+        }
+//        Log.d(TAG, "DB Call: ${PaginationApp.database!!.movieDao().getAll()}");
         simpleSwipeRefreshLayout.setOnRefreshListener {
             Handler().postDelayed({
                 simpleSwipeRefreshLayout.setRefreshing(false);
+//                if(c<4){
+//                    tempList = PaginationApp.database!!
+//                            .movieDao().loadAllUsersByPage(startC, stop) as ArrayList<Movie>
+//                    Log.d(TAG, "$tempList");
+//                    c++
+//                }
                 for(i in startC..stop){
-                    tempList.add(movieList[i])
+                    Log.d(TAG, "$startC $stop");
+                    tempList.add(PaginationApp.database!!
+                            .movieDao().loadAllUsersByPage(1, ++startC))
+//                    tempList.add(movieList[i])
                 }
                 recyclerView.adapter = mAdapter
-                startC += 5
+                mAdapter!!.notifyDataSetChanged()
+                Log.d(TAG, "$mAdapter: ")
+                startC += 1
                 stop += 5
             }, 3000)
         }
     }
 
     private fun prepareMovieData() {
-        var movie = Movie("Mad Max: Fury Road", "Action & Adventure", "2015")
+        var movie = Movie(null, "Mad Max: Fury Road", "Action & Adventure", "2015")
         movieList.add(movie)
 
-        movie = Movie("Inside Out", "Animation, Kids & Family", "2015")
+        movie = Movie(null, "Inside Out", "Animation, Kids & Family", "2015")
         movieList.add(movie)
 
-        movie = Movie("Star Wars: Episode VII - The Force Awakens", "Action", "2015")
+        movie = Movie(null, "Star Wars: Episode VII - The Force Awakens", "Action", "2015")
         movieList.add(movie)
 
-        movie = Movie("Shaun the Sheep", "Animation", "2015")
+        movie = Movie(null, "Shaun the Sheep", "Animation", "2015")
         movieList.add(movie)
 
-        movie = Movie("The Martian", "Science Fiction & Fantasy", "2015")
+        movie = Movie(null, "The Martian", "Science Fiction & Fantasy", "2015")
         movieList.add(movie)
 
-        movie = Movie("Mission: Impossible Rogue Nation", "Action", "2015")
+        movie = Movie(null, "Mission: Impossible Rogue Nation", "Action", "2015")
         movieList.add(movie)
 
-        movie = Movie("Up", "Animation", "2009")
+        movie = Movie(null, "Up", "Animation", "2009")
         movieList.add(movie)
 
-        movie = Movie("Star Trek", "Science Fiction", "2009")
+        movie = Movie(null, "Star Trek", "Science Fiction", "2009")
         movieList.add(movie)
 
-        movie = Movie("The LEGO Movie", "Animation", "2014")
+        movie = Movie(null, "The LEGO Movie", "Animation", "2014")
         movieList.add(movie)
 
-        movie = Movie("Iron Man", "Action & Adventure", "2008")
+        movie = Movie(null, "Iron Man", "Action & Adventure", "2008")
         movieList.add(movie)
 
-        movie = Movie("Aliens", "Science Fiction", "1986")
+        movie = Movie(null, "Aliens", "Science Fiction", "1986")
         movieList.add(movie)
 
-        movie = Movie("Chicken Run", "Animation", "2000")
+        movie = Movie(null, "Chicken Run", "Animation", "2000")
         movieList.add(movie)
 
-        movie = Movie("Back to the Future", "Science Fiction", "1985")
+        movie = Movie(null, "Back to the Future", "Science Fiction", "1985")
         movieList.add(movie)
 
-        movie = Movie("Raiders of the Lost Ark", "Action & Adventure", "1981")
+        movie = Movie(null, "Raiders of the Lost Ark", "Action & Adventure", "1981")
         movieList.add(movie)
 
-        movie = Movie("Goldfinger", "Action & Adventure", "1965")
+        movie = Movie(null, "Goldfinger", "Action & Adventure", "1965")
         movieList.add(movie)
 
-        movie = Movie("Guardians of the Galaxy", "Science Fiction & Fantasy", "2014")
+        movie = Movie(null, "Guardians of the Galaxy", "Science Fiction & Fantasy", "2014")
         movieList.add(movie)
 
 //        mAdapter!!.notifyDataSetChanged()
